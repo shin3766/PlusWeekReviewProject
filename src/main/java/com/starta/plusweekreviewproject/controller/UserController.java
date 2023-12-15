@@ -2,6 +2,7 @@ package com.starta.plusweekreviewproject.controller;
 
 import com.starta.plusweekreviewproject.dto.CheckUsernameRequestDto;
 import com.starta.plusweekreviewproject.dto.CommonResponseDto;
+import com.starta.plusweekreviewproject.dto.LoginRequestDto;
 import com.starta.plusweekreviewproject.dto.SignupRequestDto;
 import com.starta.plusweekreviewproject.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -28,7 +29,6 @@ public class UserController {
         return ResponseEntity.ok().body(new CommonResponseDto("사용가능한 닉네임입니다.", HttpStatus.CONTINUE.value()));
     }
 
-
     @PostMapping("/signup")
     public ResponseEntity<CommonResponseDto> signup(@RequestBody SignupRequestDto signupRequestDto) {
         try {
@@ -37,5 +37,18 @@ public class UserController {
             return ResponseEntity.badRequest().body(new CommonResponseDto(e.getMessage(), HttpStatus.BAD_REQUEST.value()));
         }
         return ResponseEntity.ok().body(new CommonResponseDto("회원가입 성공", HttpStatus.CREATED.value()));
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<CommonResponseDto> login(@RequestBody LoginRequestDto requestDto) {
+        try {
+            userService.checkValidLogin(requestDto);
+        } catch(IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(new CommonResponseDto(e.getMessage(), HttpStatus.BAD_REQUEST.value()));
+        }
+        
+        // jwt토큰을 뱉어주는 메서드
+
+        return ResponseEntity.ok().body(new CommonResponseDto("로그인 성공", HttpStatus.CREATED.value()));
     }
 }
