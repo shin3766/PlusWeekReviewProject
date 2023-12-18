@@ -26,17 +26,17 @@ public class UserService {
     private final String ADMIN_TOKEN = "AAABnvxRVklrnYxKZ0aHgTBcXukeZygoC";
 
     public void signup(SignupRequestDto requestDto) {
-        String username = requestDto.getUsername();
-        String password = passwordEncoder.encode(requestDto.getPassword());
-        String checkPassword = passwordEncoder.encode(requestDto.getCheckPassword());
 
-        if(userRepository.findByUsername(username).isPresent()) {
+        if(userRepository.findByUsername(requestDto.getUsername()).isPresent()) {
             throw new IllegalArgumentException("중복된 닉네임입니다.");
         }
 
-        if(!password.equals(checkPassword)) {
+        if(!requestDto.getPassword().equals(requestDto.getCheckPassword())) {
             throw new IllegalArgumentException("확인 비밀번호가 같지 않습니다.");
         }
+
+        String username = requestDto.getUsername();
+        String password = passwordEncoder.encode(requestDto.getPassword());
 
         // 사용자 role 확인
         UserRoleEnum role = UserRoleEnum.USER;
@@ -66,7 +66,7 @@ public class UserService {
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new IllegalArgumentException("닉네임 또는 패스워드를 확인해주세요."));
 
-        if(!password.equals(user.getPassword())){
+        if(!passwordEncoder.matches(password, user.getPassword())){
             throw new IllegalArgumentException("닉네임 또는 패스워드를 확인해주세요");
         }
     }
