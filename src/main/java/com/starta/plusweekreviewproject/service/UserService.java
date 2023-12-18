@@ -7,6 +7,7 @@ import com.starta.plusweekreviewproject.entity.User;
 import com.starta.plusweekreviewproject.entity.UserRoleEnum;
 import com.starta.plusweekreviewproject.jwt.JwtUtil;
 import com.starta.plusweekreviewproject.repository.UserRepository;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -68,6 +69,25 @@ public class UserService {
         if(!password.equals(user.getPassword())){
             throw new IllegalArgumentException("닉네임 또는 패스워드를 확인해주세요");
         }
+    }
+
+    public void login(LoginRequestDto requestDto, HttpServletResponse res) {
+        String username = requestDto.getUsername();
+        String password = requestDto.getPassword();
+
+        // 사용자 확인
+        User user = userRepository.findByUsername(username).orElseThrow(
+                () -> new IllegalArgumentException("등록된 사용자가 없습니다.")
+        );
+
+        // 비밀번호 확인
+        if (!passwordEncoder.matches(password, user.getPassword())) {
+            throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
+        }
+
+        // JWT 생성 및 쿠키에 저장 후 Response 객체에 추가
+        String token = jwtUtil.createToken(user.getUsername(), user.getRole());
+        jwtUtil.addJwtToCookie(token, res);
     }
 
 }

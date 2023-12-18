@@ -5,6 +5,7 @@ import com.starta.plusweekreviewproject.dto.CommonResponseDto;
 import com.starta.plusweekreviewproject.dto.LoginRequestDto;
 import com.starta.plusweekreviewproject.dto.SignupRequestDto;
 import com.starta.plusweekreviewproject.service.UserService;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -40,7 +41,7 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<CommonResponseDto> login(@RequestBody LoginRequestDto requestDto) {
+    public ResponseEntity<CommonResponseDto> login(@RequestBody LoginRequestDto requestDto, HttpServletResponse res) {
         try {
             userService.checkValidLogin(requestDto);
         } catch(IllegalArgumentException e) {
@@ -48,6 +49,7 @@ public class UserController {
         }
         
         // jwt토큰을 뱉어주는 메서드
+        userService.login(requestDto, res);
 
         return ResponseEntity.ok().body(new CommonResponseDto("로그인 성공", HttpStatus.CREATED.value()));
     }
