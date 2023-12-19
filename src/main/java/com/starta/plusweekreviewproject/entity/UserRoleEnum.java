@@ -1,5 +1,8 @@
 package com.starta.plusweekreviewproject.entity;
 
+import lombok.Getter;
+
+@Getter
 public enum UserRoleEnum {
     USER(Authority.USER),
 

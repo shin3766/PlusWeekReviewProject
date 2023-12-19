@@ -8,12 +8,9 @@ import com.starta.plusweekreviewproject.entity.UserRoleEnum;
 import com.starta.plusweekreviewproject.jwt.JwtUtil;
 import com.starta.plusweekreviewproject.repository.UserRepository;
 import jakarta.servlet.http.HttpServletResponse;
-import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor

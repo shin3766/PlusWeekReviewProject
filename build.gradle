@@ -28,6 +28,9 @@ dependencies {
     // SECURITY
     implementation 'org.springframework.boot:spring-boot-starter-security'
 
+    // Thymleag
+    implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+
     // WEB
     implementation 'org.springframework.boot:spring-boot-starter-web'
 
