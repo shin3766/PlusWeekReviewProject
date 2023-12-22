@@ -40,4 +40,10 @@ public class PostController {
     public ResponseEntity<SelectPostResponseDto> getPost(@PathVariable Long postId) {
         return ResponseEntity.ok().body(postService.getPost(postId));
     }
+
+    @PatchMapping("/{postId}")
+    public ResponseEntity<PostResponseDto> updatePost(@PathVariable Long postId, @RequestBody PostRequestDto requestDto, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        PostResponseDto updatePost = postService.updatePost(postId, requestDto, userDetails.getUser());
+        return ResponseEntity.status(201).body(updatePost);
+    }
 }

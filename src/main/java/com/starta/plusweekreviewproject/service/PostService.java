@@ -3,13 +3,16 @@ package com.starta.plusweekreviewproject.service;
 import com.starta.plusweekreviewproject.dto.*;
 import com.starta.plusweekreviewproject.entity.Post;
 import com.starta.plusweekreviewproject.entity.User;
+import com.starta.plusweekreviewproject.entity.UserDetailsImpl;
 import com.starta.plusweekreviewproject.repository.PostRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
+import java.util.concurrent.RejectedExecutionException;
 import java.util.stream.Collectors;
 
 @Service
@@ -40,8 +43,34 @@ public class PostService {
     }
 
     public SelectPostResponseDto getPost(Long id) {
-        Post post = postRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("선택한 게시글은 존재하지 않습니다."));
+        Post post = getPostById(id);
         return new SelectPostResponseDto(post);
+    }
+
+    @Transactional
+    public PostResponseDto updatePost(Long id, PostRequestDto requestDto, User user) {
+        Post post= getPostById(id);
+
+        // 토큰 사용자 체크 메서드
+        checkAuth(id, user);
+
+        post.setTitle(requestDto.getTitle());
+        post.setContent(requestDto.getContent());
+
+        return new PostResponseDto(post);
+    }
+
+    public Post getPostById(Long id) {
+        return postRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("선택한 게시글은 존재하지 않습니다."));
+    }
+
+    private Post checkAuth(Long id, User user) {
+        Post post = getPostById(id);
+
+        if (!user.getId().equals(post.getUser().getId())) {
+            throw new RejectedExecutionException("작성자만 수정할 수 있습니다.");
+        }
+        return post;
     }
 }

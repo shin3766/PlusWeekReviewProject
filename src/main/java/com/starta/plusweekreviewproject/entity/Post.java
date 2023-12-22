@@ -2,7 +2,6 @@ package com.starta.plusweekreviewproject.entity;
 
 import com.starta.plusweekreviewproject.dto.PostRequestDto;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -46,4 +45,8 @@ public class Post {
     public void setContent(String content) { this.content = content; }
 
 
+    public void update(PostRequestDto requestDto) {
+        this.title = requestDto.getTitle();
+        this.content = requestDto.getContent();
+    }
 }

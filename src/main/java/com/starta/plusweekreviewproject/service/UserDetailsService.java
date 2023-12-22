@@ -18,5 +18,4 @@ public class UserDetailsService {
 			.orElseThrow(() -> new UsernameNotFoundException("Not Found" + username));
 		return new UserDetailsImpl(user);
 	}
-
 }
