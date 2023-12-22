@@ -73,4 +73,10 @@ public class PostService {
         }
         return post;
     }
+
+    public void deletePost(long id, User user) {
+        Post post = checkAuth(id, user);
+
+        postRepository.delete(post);
+    }
 }

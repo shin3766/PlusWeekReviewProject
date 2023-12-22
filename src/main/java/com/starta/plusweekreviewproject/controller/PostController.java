@@ -46,4 +46,10 @@ public class PostController {
         PostResponseDto updatePost = postService.updatePost(postId, requestDto, userDetails.getUser());
         return ResponseEntity.status(201).body(updatePost);
     }
+
+    @DeleteMapping("/{postId}")
+    public ResponseEntity<CommonResponseDto> deletePost(@PathVariable long postId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        postService.deletePost(postId, userDetails.getUser());
+        return ResponseEntity.ok().body(new CommonResponseDto("게시글이 삭제되었습니다.", 200));
+    }
 }
