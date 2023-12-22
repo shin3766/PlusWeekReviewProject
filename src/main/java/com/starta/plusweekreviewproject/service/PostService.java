@@ -1,9 +1,11 @@
 package com.starta.plusweekreviewproject.service;
 
 import com.starta.plusweekreviewproject.dto.PostListResponseDto;
+import com.starta.plusweekreviewproject.dto.PostRequestDto;
 import com.starta.plusweekreviewproject.dto.PostResponseDto;
 import com.starta.plusweekreviewproject.dto.UsernameDto;
 import com.starta.plusweekreviewproject.entity.Post;
+import com.starta.plusweekreviewproject.entity.User;
 import com.starta.plusweekreviewproject.repository.PostRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Sort;
@@ -31,4 +33,12 @@ public class PostService {
                 .collect(Collectors.toList());
     }
 
+    public PostResponseDto createPost(PostRequestDto requestDto, User user) {
+        Post post = new Post(requestDto);
+        post.setUser(user);
+
+        postRepository.save(post);
+
+        return new PostResponseDto(post);
+    }
 }
