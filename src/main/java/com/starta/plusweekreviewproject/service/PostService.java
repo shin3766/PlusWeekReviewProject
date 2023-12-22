@@ -1,9 +1,6 @@
 package com.starta.plusweekreviewproject.service;
 
-import com.starta.plusweekreviewproject.dto.PostListResponseDto;
-import com.starta.plusweekreviewproject.dto.PostRequestDto;
-import com.starta.plusweekreviewproject.dto.PostResponseDto;
-import com.starta.plusweekreviewproject.dto.UsernameDto;
+import com.starta.plusweekreviewproject.dto.*;
 import com.starta.plusweekreviewproject.entity.Post;
 import com.starta.plusweekreviewproject.entity.User;
 import com.starta.plusweekreviewproject.repository.PostRepository;
@@ -40,5 +37,11 @@ public class PostService {
         postRepository.save(post);
 
         return new PostResponseDto(post);
+    }
+
+    public SelectPostResponseDto getPost(Long id) {
+        Post post = postRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("선택한 게시글은 존재하지 않습니다."));
+        return new SelectPostResponseDto(post);
     }
 }

@@ -1,9 +1,6 @@
 package com.starta.plusweekreviewproject.controller;
 
-import com.starta.plusweekreviewproject.dto.PostListResponseDto;
-import com.starta.plusweekreviewproject.dto.PostRequestDto;
-import com.starta.plusweekreviewproject.dto.PostResponseDto;
-import com.starta.plusweekreviewproject.dto.UsernameDto;
+import com.starta.plusweekreviewproject.dto.*;
 import com.starta.plusweekreviewproject.entity.Post;
 import com.starta.plusweekreviewproject.entity.UserDetailsImpl;
 import com.starta.plusweekreviewproject.service.PostService;
@@ -37,5 +34,10 @@ public class PostController {
         PostResponseDto responseDto = postService.createPost(requestDto, userDetails.getUser());
 
         return ResponseEntity.status(201).body(responseDto);
+    }
+
+    @GetMapping("/{postId}")
+    public ResponseEntity<SelectPostResponseDto> getPost(@PathVariable Long postId) {
+        return ResponseEntity.ok().body(postService.getPost(postId));
     }
 }
